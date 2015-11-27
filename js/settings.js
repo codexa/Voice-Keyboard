@@ -1,12 +1,11 @@
-document.getElementById('back').addEventListener('click', function() {
-	document.addEventListener('visibilitychange', function() {
-		// Close ourself after the activity transition is completed.
-		window.close();
-	});
-	var activity = new MozActivity({
-		name: 'configure',
-		data: {
-			target: 'device'
-		}
-	});
-});
+var settings = {};
+
+settings.get = function (name) {
+	name = ("app.settings."+name);
+	return localStorage.getItem(name);
+};
+
+settings.save = function (name, value) {
+	name = ("app.settings."+name);
+	localStorage.setItem(name, value);
+};

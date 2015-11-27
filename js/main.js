@@ -23,6 +23,7 @@ function init() {
 
 	var switchLayoutButton = document.getElementById('switch-layout-button');
 	switchLayoutButton.addEventListener('click', function switchHandler() {
+		vibrate();
 		var mgmt = navigator.mozInputMethod.mgmt;
 		mgmt.next();
 	});
@@ -31,6 +32,7 @@ function init() {
 	var menuTimeout = 0;
 	switchLayoutButton.addEventListener('touchstart', function longHandler() {
 		menuTimeout = window.setTimeout(function menuTimeout() {
+			vibrate();
 			var mgmt = navigator.mozInputMethod.mgmt;
 			mgmt.showAll();
 		}, 700);
@@ -43,6 +45,7 @@ function init() {
 	var closeButton = document.getElementById('close-button');
 	if (closeButton) {
 		closeButton.addEventListener('click', function(){
+			vibrate();
 			var mgmt = navigator.mozInputMethod.mgmt;
 			mgmt.hide();
 		});
@@ -73,6 +76,15 @@ function sendKey(keyCode) {
 				inputContext.sendKey(0, keyCode, 0);
 			}
 			break;
+	}
+}
+
+function vibrate(duration) {
+	if (settings.get("vibration") == "true") {
+		if (!duration) {
+			duration = 50;
+		}
+		navigator.vibrate(duration);
 	}
 }
 
@@ -112,10 +124,14 @@ function addRecordingListeners() {
 function recordingUI(state) {
 	switch (state) {
 		case "on":
+			vibrate(100);
 			isRecording = true;
 			break;
 		case "off":
+			isRecording = false;
+			break;
 		case "error":
+			vibrate(500);
 			isRecording = false;
 			break;
 		default:
